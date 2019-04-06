@@ -1,0 +1,32 @@
+version: "3.0"
+
+services:
+  frontend:
+    build:
+      context: ./containers/nginx
+      args:
+        DEFAULT_USER: 1000
+    # environment:
+    #   - DEFAULT_USER:1001
+    ports:
+      - 80:8080
+    volumes:
+      - ./logs/nginx/:/var/log/nginx
+      - ./src/frontend/dist:/var/www/html
+    command: nginx -g "daemon off;"
+    restart: always
+
+  backend:
+    build: ./src/backend
+    volumes:
+      - ./logs/backend/:/logs
+      - ./src/backend:/app
+    restart: always
+
+  neo4j:
+    build: ./containers/neo4j
+    volumes:
+      - ./logs/neo4j:/logs
+      - ./data/neo4j:/data
+      - ./data/backup:/backup
+    restart: always
