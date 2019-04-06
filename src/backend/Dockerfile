@@ -4,7 +4,14 @@ RUN mkdir /var/log/node
 WORKDIR /app
 RUN npm install -g nodemon
 
-RUN apk add --no-cache curl
+RUN apk add --no-cache curl shadow
+
+ARG UID=1000
+ENV UID=${UID}
+ARG GID=1000
+ENV GID=${GID}
+RUN usermod -u $UID node \
+  && groupmod -g $GID node
 
 USER node:node
 

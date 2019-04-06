@@ -5,7 +5,8 @@ services:
     build:
       context: ./containers/nginx
       args:
-        DEFAULT_USER: 1000
+        UID: 1000
+        GID: 1000
     # environment:
     #   - DEFAULT_USER:1001
     ports:
@@ -17,7 +18,11 @@ services:
     restart: always
 
   backend:
-    build: ./src/backend
+    build:
+      context: ./src/backend
+      args:
+        UID: 1000
+        GID: 1000
     volumes:
       - ./logs/backend/:/logs
       - ./src/backend:/app
